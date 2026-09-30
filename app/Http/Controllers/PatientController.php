@@ -8,12 +8,12 @@ class PatientController extends Controller
 {
     public function index()
     {
-         $judul = 'Data Pasien';
+        $patients = [
+            ['id' => 1, 'nama' => 'Kafka', 'alamat' => 'Kudus'],
+            ['id' => 2, 'nama' => 'Sashi', 'alamat' => 'Jepara'],
+            ['id' => 3, 'nama' => 'Aurora', 'alamat' => 'Pati'],
+        ];
 
-        return view('pasien.index', compact('judul'));
-    }
-    public function show($id)
-    {
-        return 'Menampilkan pasien dengan ID: ' . $id;
+        return view('pasien.index', compact('patients'));
     }
 }

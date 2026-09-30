@@ -1,13 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Data Pasien</title>
-</head>
-<body>
+@extends('layouts.app')
 
-    <h1>{{ $judul }}</h1>
+@section('title', 'Data Pasien')
 
-    <p>Halaman Data Pasien Klinik</p>
+@section('content')
 
-</body>
-</html>
+<h1>Data Pasien</h1>
+
+<table border="1" cellpadding="8">
+
+    <thead>
+        <tr>
+            <th>No.</th>
+            <th>Nama</th>
+            <th>Alamat</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        @forelse ($patients as $patient)
+
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $patient['nama'] }}</td>
+                <td>{{ $patient['alamat'] }}</td>
+            </tr>
+
+        @empty
+
+            <tr>
+                <td colspan="3">
+                    Belum ada data pasien.
+                </td>
+            </tr>
+
+        @endforelse
+
+    </tbody>
+
+</table>
+
+@endsection
