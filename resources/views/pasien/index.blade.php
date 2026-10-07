@@ -11,31 +11,27 @@
     <thead>
         <tr>
             <th>No.</th>
+            <th>No. Rekam Medis</th>
             <th>Nama</th>
             <th>Alamat</th>
         </tr>
     </thead>
 
     <tbody>
-
         @forelse ($patients as $patient)
-
             <tr>
                 <td>{{ $loop->iteration }}</td>
-                <td>{{ $patient['nama'] }}</td>
-                <td>{{ $patient['alamat'] }}</td>
+                <td>{{ $patient->medical_record_number }}</td>
+                <td>{{ $patient->name }}</td>
+                <td>{{ $patient->address }}</td>
             </tr>
-
         @empty
-
             <tr>
-                <td colspan="3">
+                <td colspan="4">
                     Belum ada data pasien.
                 </td>
             </tr>
-
         @endforelse
-
     </tbody>
 
 </table>

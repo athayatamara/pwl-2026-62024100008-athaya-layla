@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Poli;
 
 class PoliController extends Controller
 {
     public function index()
     {
-        return view('poli.index');
+        $poli = Poli::all();
+
+        return view('poli.index', compact('poli'));
     }
 }
