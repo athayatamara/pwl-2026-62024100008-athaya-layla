@@ -1,3 +1,4 @@
+```php
 <?php
 
 namespace Database\Seeders;
@@ -9,7 +10,9 @@ class PoliSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('polis')->insert([
+        $now = now();
+
+        $data = [
             [
                 'poli_code' => 'P001',
                 'name' => 'Poli Umum',
@@ -35,6 +38,16 @@ class PoliSeeder extends Seeder
                 'name' => 'Poli Penyakit Dalam',
                 'is_active' => false,
             ],
-        ]);
+        ];
+
+        foreach ($data as $item) {
+            DB::table('polis')->updateOrInsert(
+                ['poli_code' => $item['poli_code']],
+                array_merge($item, [
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ])
+            );
+        }
     }
 }
