@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('title', 'Data Poli')
@@ -25,7 +26,7 @@
                     <th>Kode Poli</th>
                     <th>Nama Poli</th>
                     <th>Status</th>
-                    <th width="180">Aksi</th>
+                    <th width="250">Aksi</th>
                 </tr>
             </thead>
 
@@ -43,6 +44,11 @@
                             @endif
                         </td>
                         <td>
+                            <a href="{{ route('poli.show', $p->id) }}"
+                               class="btn btn-info btn-sm">
+                                Detail
+                            </a>
+
                             <a href="{{ route('poli.edit', $p->id) }}"
                                class="btn btn-warning btn-sm">
                                 Edit

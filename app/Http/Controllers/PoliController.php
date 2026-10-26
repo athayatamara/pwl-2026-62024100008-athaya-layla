@@ -35,6 +35,13 @@ class PoliController extends Controller
             ->with('success', 'Data poli berhasil ditambahkan.');
     }
 
+    public function show(Poli $poli)
+    {
+        $poli->load('doctors');
+
+        return view('poli.show', compact('poli'));
+    }
+
     public function edit(Poli $poli)
     {
         return view('poli.edit', compact('poli'));
