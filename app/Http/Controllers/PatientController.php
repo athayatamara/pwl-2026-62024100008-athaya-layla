@@ -8,10 +8,42 @@ use Illuminate\Validation\Rule;
 
 class PatientController extends Controller
 {
-    // Menampilkan daftar pasien
-    public function index()
+    // Menampilkan daftar pasien dengan search, filter,
+    // sorting, dan pagination
+    public function index(Request $request)
     {
-        $patients = Patient::all();
+        $search = $request->search;
+        $gender = $request->gender;
+
+        // Kolom sorting yang diizinkan
+        $allowedSorts = ['name', 'created_at'];
+
+        $sort = $request->sort;
+        $direction = $request->direction;
+
+        // Validasi kolom sorting
+        if (!in_array($sort, $allowedSorts)) {
+            $sort = 'created_at';
+        }
+
+        // Validasi arah sorting
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'asc';
+        }
+
+        $patients = Patient::query()
+            ->when($search, function ($query, $search) {
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%')
+                      ->orWhere('medical_record_number', 'like', '%' . $search . '%');
+                });
+            })
+            ->when($gender, function ($query, $gender) {
+                $query->where('gender', $gender);
+            })
+            ->orderBy($sort, $direction)
+            ->paginate(10)
+            ->withQueryString();
 
         return view('pasien.index', compact('patients'));
     }

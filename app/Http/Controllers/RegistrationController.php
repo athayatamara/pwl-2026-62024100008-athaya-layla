@@ -9,11 +9,64 @@ use Illuminate\Http\Request;
 
 class RegistrationController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $registrations = Registration::with(['patient', 'doctor'])->get();
+        $search = $request->search;
+        $doctor_id = $request->doctor_id;
+        $status = $request->status;
+        $date = $request->date;
 
-        return view('registrasi.index', compact('registrations'));
+        // Membatasi pilihan sorting agar aman
+        $direction = $request->direction;
+
+        if (!in_array($direction, ['asc', 'desc'])) {
+            $direction = 'desc';
+        }
+
+        $registrations = Registration::with(['patient', 'doctor'])
+            // Search berdasarkan nama pasien
+            ->when($search, function ($query, $search) {
+                $query->whereHas('patient', function ($q) use ($search) {
+                    $q->where('name', 'like', '%' . $search . '%');
+                });
+            })
+
+            // Filter berdasarkan dokter
+            ->when($doctor_id, function ($query, $doctor_id) {
+                $query->where('doctor_id', $doctor_id);
+            })
+
+            // Filter berdasarkan status
+            ->when($status, function ($query, $status) {
+                $query->where('status', $status);
+            })
+
+            // Filter berdasarkan tanggal registrasi
+            ->when($date, function ($query, $date) {
+                $query->whereDate('registration_date', $date);
+            })
+
+            // Sorting tanggal registrasi
+            ->orderBy('registration_date', $direction)
+            ->orderBy('id', $direction)
+
+            // Pagination maksimal 10 data
+            ->paginate(10)
+            ->withQueryString();
+
+        // Data untuk pilihan filter
+        $doctors = Doctor::orderBy('name')->get();
+
+        $statuses = Registration::select('status')
+            ->distinct()
+            ->orderBy('status')
+            ->pluck('status');
+
+        return view('registrasi.index', compact(
+            'registrations',
+            'doctors',
+            'statuses'
+        ));
     }
 
     public function create()
