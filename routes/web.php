@@ -7,20 +7,40 @@ use App\Http\Controllers\PoliController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\Auth\LoginController;
 
-Route::resource('pasien', PatientController::class);
+// Route Login (bisa diakses tanpa login)
+Route::get('/login', [LoginController::class, 'create'])
+    ->name('login');
 
-Route::resource('dokter', DoctorController::class);
+Route::post('/login', [LoginController::class, 'store'])
+    ->name('login.store');
 
-Route::resource('poli', PoliController::class);
+// Route yang hanya bisa diakses setelah login
+Route::middleware(['auth'])->group(function () {
 
-Route::resource('registrasi', RegistrationController::class)
-    ->only(['index', 'create', 'store']);
-    
-Route::get('/dashboard', [DashboardController::class, 'index'])
-    ->name('dashboard');
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+        ->name('dashboard');
 
-Route::get('/jadwal', [ScheduleController::class, 'index'])
-    ->name('jadwal.index');
+    // Data Pasien
+    Route::resource('pasien', PatientController::class);
 
-Route::get('/jadwal/{hari}', [ScheduleController::class, 'show']);
+    // Data Dokter
+    Route::resource('dokter', DoctorController::class);
+
+    // Data Poli
+    Route::resource('poli', PoliController::class);
+
+    // Registrasi
+    Route::resource('registrasi', RegistrationController::class)
+        ->only(['index', 'create', 'store']);
+
+    // Jadwal
+    Route::get('/jadwal', [ScheduleController::class, 'index'])
+        ->name('jadwal.index');
+
+    Route::get('/jadwal/{hari}', [ScheduleController::class, 'show']);
+
+    Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+});

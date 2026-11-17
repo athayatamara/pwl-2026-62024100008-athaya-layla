@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -123,33 +122,56 @@
 
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ url('/dashboard') }}">
-                            Dashboard
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ route('pasien.index') }}">
-                            Pasien
-                        </a>
-                    </li>
+                    @auth
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/dashboard') }}">
+                                Dashboard
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ url('/dokter') }}">
-                            Dokter
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('pasien.index') }}">
+                                Pasien
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="{{ url('/poli') }}">
-                            Poli
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/dokter') }}">
+                                Dokter
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url('/poli') }}">
+                                Poli
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <span class="nav-link text-white">
+                                Selamat datang, {{ Auth::user()->name }}
+                            </span>
+                        </li>
+
+                        <li class="nav-item">
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="nav-link btn btn-link text-white">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+
+                    @else
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">
+                                Login
+                            </a>
+                        </li>
+                    @endauth
+
                 </ul>
             </div>
 
