@@ -8,6 +8,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\RegistrationController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\UserController;
 
 // Route Login (bisa diakses tanpa login)
 Route::get('/login', [LoginController::class, 'create'])
@@ -23,8 +24,22 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    // Data Pasien
+        // Manajemen User (khusus Admin)
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users.index');
+    });
+
+        // Pemeriksaan (khusus Dokter)
+    Route::middleware(['role:doctor'])->group(function () {
+        Route::get('/pemeriksaan', function () {
+            return view('pemeriksaan.index');
+        })->name('pemeriksaan.index');
+});
+    // Data Pasien (Admin dan Petugas Pendaftaran)
+Route::middleware(['role:admin,registration'])->group(function () {
     Route::resource('pasien', PatientController::class);
+});
 
     // Data Dokter
     Route::resource('dokter', DoctorController::class);

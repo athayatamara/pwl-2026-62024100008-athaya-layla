@@ -122,56 +122,84 @@
 
             <div class="collapse navbar-collapse" id="navbarMenu">
                 <ul class="navbar-nav ms-auto align-items-lg-center">
+@auth
+    <li class="nav-item">
+        <a class="nav-link" href="{{ url('/dashboard') }}">
+            Dashboard
+        </a>
+    </li>
 
-                    @auth
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/dashboard') }}">
-                                Dashboard
-                            </a>
-                        </li>
+    @if (Auth::user()->role === 'admin')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('users.index') }}">
+                Manajemen User
+            </a>
+        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('pasien.index') }}">
-                                Pasien
-                            </a>
-                        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('pasien.index') }}">
+                Pasien
+            </a>
+        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/dokter') }}">
-                                Dokter
-                            </a>
-                        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/dokter') }}">
+                Dokter
+            </a>
+        </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url('/poli') }}">
-                                Poli
-                            </a>
-                        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/poli') }}">
+                Poli
+            </a>
+        </li>
+    @endif
 
-                        <li class="nav-item">
-                            <span class="nav-link text-white">
-                                Selamat datang, {{ Auth::user()->name }}
-                            </span>
-                        </li>
+    @if (Auth::user()->role === 'registration')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('pasien.index') }}">
+                Pasien
+            </a>
+        </li>
 
-                        <li class="nav-item">
-                            <form action="{{ route('logout') }}" method="POST">
-                                @csrf
-                                <button type="submit"
-                                        class="nav-link btn btn-link text-white">
-                                    Logout
-                                </button>
-                            </form>
-                        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ url('/registrasi') }}">
+                Registrasi
+            </a>
+        </li>
+    @endif
 
-                    @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">
-                                Login
-                            </a>
-                        </li>
-                    @endauth
+    @if (Auth::user()->role === 'doctor')
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('pemeriksaan.index') }}">
+                Pemeriksaan
+            </a>
+        </li>
+    @endif
 
+    <li class="nav-item">
+        <span class="nav-link text-white">
+            Selamat datang, {{ Auth::user()->name }}
+        </span>
+    </li>
+
+    <li class="nav-item">
+        <form action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button type="submit"
+                    class="nav-link btn btn-link text-white">
+                Logout
+            </button>
+        </form>
+    </li>
+
+@else
+    <li class="nav-item">
+        <a class="nav-link" href="{{ route('login') }}">
+            Login
+        </a>
+    </li>
+@endauth
                 </ul>
             </div>
 
